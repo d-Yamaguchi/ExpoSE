@@ -4,9 +4,6 @@
   "description": "",
   "main": "lib/S$/src/symbols.js",
   "author": "Blake Loring",
-  "engines": {
-    "node": "^14.16.1"
-  },
   "scripts": {
     "test": "./scripts/run_tests"
   },
