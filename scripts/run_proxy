@@ -3,8 +3,8 @@
 cd Analyser
 rm -rf cache
 
-mkdir -p ../.tmp
-MITM_FILE="$(mktemp ../.tmp/mitmlog.XXXXXXXXX)"
+mkdir -p ../../.tmp
+MITM_FILE="$(mktemp ../../.tmp/mitmlog.XXXXXXXXX)"
 MITM_PORT=$((((RANDOM<<15)|RANDOM) % 63001 + 2000 ))
 
 echo "" > "${MITM_FILE}"
@@ -12,7 +12,7 @@ echo "" > "${MITM_FILE}"
 if [[ "$(uname)" == "Darwin" ]]; then
     script -q /dev/null mitmdump --ssl-insecure -p "${MITM_PORT}" -s "node_modules/jalangi2/scripts/proxy.py" --set args="--inlineIID --inlineSource --analysis bin/bundle.js" &> "${MITM_FILE}" &
 else
-    mitmdump --ssl-insecure -p "${MITM_PORT}" -s "node_modules/jalangi2/scripts/proxy.py" --set args="--inlineIID --inlineSource --analysis bin/bundle.js" &> "${MITM_FILE}" &
+    stdbuf -oL -eL mitmdump --ssl-insecure -p "${MITM_PORT}" -s "node_modules/jalangi2/scripts/proxy.py" --set args="--inlineIID --inlineSource --analysis bin/bundle.js" &> "${MITM_FILE}" &
 fi
 
 MITM_PID="$!"
@@ -29,7 +29,7 @@ do
 		break;
 	fi
 
-	if grep -q "proxy listening" "${MITM_FILE}"; then
+	if grep -q "listening at" "${MITM_FILE}"; then
 		echo "Proxy listening on port ${MITM_PORT}"
 		break;
 	fi
